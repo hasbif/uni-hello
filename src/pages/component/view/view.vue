@@ -2,6 +2,28 @@
 	<view>
 		<page-head title="view"></page-head>
 		<view class="uni-padding-wrap uni-common-mt">
+
+<view> 
+	<text>Login phone number: Identify</text>
+
+<input placeholder="Phone number" v-model="phoneNumber" :disabled="loggedIn"/>
+<button v-on:click="loginLogoutButton">
+	{{buttonType}}
+</button>
+	<text>Trackers</text>
+<button v-on:click="handleApplyOffer">
+	Apply Offer
+</button>
+<button v-on:click="handleMenuOffer">
+	Menu Offer
+</button>
+</view>
+
+
+
+
+
+
 			<view class="uni-hello-text">
 				Flex是Flexible Box的缩写，意为“弹性布局”，用来为盒状模型提供最大的灵活性。当设置display: flex后，继续给view等容器组件设置flex-direction:
 				row或column，就可以在该容器内按行或列排布子组件。uni-app推荐使用flex布局。因为flex布局有利于跨更多平台，尤其是采用原生渲染的平台。
@@ -103,10 +125,45 @@
 	</view>
 </template>
 <script>
+import { login, logout,clickBtnApplyOffer, clickMenuOffers } from '../../../cxp/exampleTrackers'
+import button from '../button/button.vue'
+
 	export default {
-		data() {
-			return {}
+  components: { button },
+	data: function(){
+		return {
+				phoneNumber: "",
+				loggedIn: !!localStorage.getItem("phoneNumber")
+			}
+	},
+	mounted() {
+  window.addEventListener('localstorage-changed', (event) => {
+    this.data = !!event.detail.phoneNumber;
+  });
+},
+	computed: {
+		buttonType: function(){
+			return this.loggedIn ? "Logout" : "Login"
+		},
+	},
+	methods: {
+		handleLogin: function(){
+			login(this.phoneNumber)
+		},
+		handleLogout: function(){
+			logout()
+		},
+		loginLogoutButton: function(){
+			if (this.loggedIn) return this.handleLogout()
+			this.handleLogin()
+		},
+		handleMenuOffer: function(){
+			clickMenuOffers()
+		},
+		handleApplyOffer: function(){
+			clickBtnApplyOffer()
 		}
+	}
 	}
 </script>
 
